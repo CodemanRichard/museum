@@ -1,6 +1,6 @@
 # 可视化课程设计
 
-此次参加 [ChinaVis](https://chinavis.org/2024/challenge.html) 2024 的数字人文赛道。
+此次参加 [ChinaVis 2024](https://chinavis.org/2024/challenge.html) 的数字人文赛道。
 
 ## 环境配置
 
