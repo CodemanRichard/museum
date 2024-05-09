@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>拖动窗口</title>
+<style>
+    /* 弹出窗口样式 */
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        cursor: move; /* 添加鼠标拖动样式 */
+    }
+    /* 关闭按钮样式 */
+    .close {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<!-- 触发弹窗的按钮 -->
+<button onclick="openPopup()">打开小窗口</button>
+
+<!-- 弹窗内容 -->
+<div id="popup" class="popup" onmousedown="startDrag(event)">
+    <span class="close" onclick="closePopup()">&times;</span>
+    <p>这是弹出窗口的内容。你可以拖动我！</p>
+</div>
+
+<script>
+    var offsetX, offsetY;
+    var isDragging = false;
+    var popup = document.getElementById("popup");
+
+    // 打开弹窗
+    function openPopup() {
+        popup.style.display = "block";
+    }
+
+    // 关闭弹窗
+    function closePopup() {
+        popup.style.display = "none";
+    }
+
+    // 开始拖动
+    function startDrag(event) {
+        isDragging = true;
+        offsetX = event.clientX - popup.offsetLeft;
+        offsetY = event.clientY - popup.offsetTop;
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", endDrag);
+    }
+
+    // 拖动
+    function drag(event) {
+        if (isDragging) {
+            popup.style.left = (event.clientX - offsetX) + "px";
+            popup.style.top = (event.clientY - offsetY) + "px";
+        }
+    }
+
+    // 结束拖动
+    function endDrag() {
+        isDragging = false;
+        document.removeEventListener("mousemove", drag);
+        document.removeEventListener("mouseup", endDrag);
+    }
+</script>
+
+</body>
+</html>
