@@ -3,22 +3,14 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <div className='irregular-box box1'>logo与标题</div>
+    <div className='irregular-box box2'>地图框</div>
+    <div className='irregular-box box3'>馆藏与词云</div>
+    <div className='irregular-box box4'>生产年代</div>
+    <div className='irregular-box box5'>来源地热度</div>
+    <div className='irregular-box box6'>文物列表</div>
+    </>
   );
 }
 
