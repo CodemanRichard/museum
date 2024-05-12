@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
+import L, { marker } from "leaflet";
 
 import "./map.css";
 import "leaflet/dist/leaflet.css";
@@ -31,12 +31,14 @@ const points = [
 ];
 
 function Map() {
-  const [iconSize, setIconSize] = useState([20, 20]);
-
-  const handleZoom = (event) => {
-    const newZoom = event.target._zoom;
+  const handleZoom = (map) => {
+    const newZoom = map.getZoom();
     const scaleFactor = newZoom / 2;
-    setIconSize([20 * scaleFactor, 20 * scaleFactor]);
+    let markers = document.getElementsByClassName("leaflet-marker-icon");
+    for (let i = 0; i < markers.length; i++) {
+      markers[i].style.width = `${20 * scaleFactor}px`;
+      markers[i].style.height = `${20 * scaleFactor}px`;
+    }
   };
 
   return (
@@ -44,7 +46,6 @@ function Map() {
       center={[20, 0]}
       zoom={2}
       style={{ height: "100%", width: "100%" }}
-      onZoomEnd={handleZoom}
     >
       <TileLayer
         url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -55,8 +56,19 @@ function Map() {
           <Popup>{point[0]}</Popup>
         </Marker>
       ))}
+      <ZoomHandler onZoomEnd={handleZoom} />
     </MapContainer>
   );
+}
+
+function ZoomHandler({ onZoomEnd }) {
+  const map = useMapEvents({
+    zoomend: () => {
+      onZoomEnd(map);
+    }
+  });
+
+  return null;
 }
 
 export default Map;
