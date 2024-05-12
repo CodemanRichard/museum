@@ -1,10 +1,11 @@
 import './App.css';
+import Map from './map.js';
 
 function App() {
   return (
     <>
     <div className='irregular-box box1'>logo与标题</div>
-    <div className='irregular-box box2'>地图框</div>
+    <div className='irregular-box box2'><Map/></div>
     <div className='irregular-box box3'>藏品展示</div>
     <div className='irregular-box box4'>馆藏</div>
     <div className='irregular-box box5'>词云</div>
