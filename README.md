@@ -8,6 +8,10 @@
 
 `pip install flask-cors`
 
+`pip install pandas`
+
+`pip install openpyxl`
+
 ## 运行方式
 
 1. 运行`npm --legacy-peer-deps install`确定已安装所有依赖
