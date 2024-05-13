@@ -1,10 +1,16 @@
-import React, { useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
-import L, { marker } from "leaflet";
+import React from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
+import L from "leaflet";
 
 import "./map.css";
 import "leaflet/dist/leaflet.css";
-import logo from './logo.png';
+import logo from "./logo.png";
 
 const customIcon = new L.Icon({
   iconUrl: logo,
@@ -21,10 +27,24 @@ const points = [
   ["正仓院", 34.327889, 135.891749],
   ["大都会艺术博物馆", 40.779344, -73.962486],
   ["卢浮宫博物馆", 48.860098, 2.33162],
-  ["台北故宫博物馆", 25.04776, 121.53185]
+  ["台北故宫博物馆", 25.04776, 121.53185],
 ];
 
-function Map() {
+const urls = [
+  "https://www.vam.ac.uk/",
+  "https://www.nma.gov.au/",
+  "https://www.dpm.org.cn/",
+  "https://www.kyohaku.go.jp/",
+  "https://shosoin.kunaicho.go.jp/",
+  "https://www.metmuseum.org/",
+  "https://www.louvre.fr/",
+  "https://www.npm.gov.tw/",
+];
+
+function Map({ changeProps }) {
+  const handleMuseumChange = (museum) => {
+    changeProps(museum);
+  };
   const handleZoom = (map) => {
     const newZoom = map.getZoom();
     const scaleFactor = newZoom / 2;
@@ -34,6 +54,9 @@ function Map() {
       markers[i].style.height = `${20 * scaleFactor}px`;
     }
   };
+  function clickHandler(name) {
+    handleMuseumChange(name);
+  }
 
   return (
     <MapContainer
@@ -46,8 +69,15 @@ function Map() {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       />
       {points.map((point, index) => (
-        <Marker key={index} position={[point[1], point[2]]} icon={customIcon}>
-          <Popup>{point[0]}</Popup>
+        <Marker
+          key={index}
+          position={[point[1], point[2]]}
+          icon={customIcon}
+          eventHandlers={{ click: () => clickHandler(point[0]) }}
+        >
+          <Popup>
+            <a href={urls[index]}>{point[0]}</a>
+          </Popup>
         </Marker>
       ))}
       <ZoomHandler onZoomEnd={handleZoom} />
@@ -59,7 +89,7 @@ function ZoomHandler({ onZoomEnd }) {
   const map = useMapEvents({
     zoomend: () => {
       onZoomEnd(map);
-    }
+    },
   });
 
   return null;
