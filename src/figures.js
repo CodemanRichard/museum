@@ -3,6 +3,47 @@ import * as d3 from 'd3';
 import * as cloud from 'd3-cloud';
 
 const Figures = ({ museumName, figureNo }) => {
+    const [totalCount, setTotalCount] = useState(0);
+    const [chinaCount, setChinaCount] = useState(0);
+
+    const drawCollection = () => {
+        // Select the SVG container
+        const svg = d3.select("#collection");
+
+        // Set up the scales for the bar chart
+
+        const xScale = d3.scaleBand()
+            .domain(['Total Count', 'China Count'])
+            .range([0, 400])
+            .padding(0.1);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, totalCount])
+            .range([400, 0]);
+
+        // Draw the bars
+        svg.selectAll("rect")
+            .data([totalCount, chinaCount])
+            .enter()
+            .append("rect")
+            .attr("x", (d, i) => xScale(i === 0 ? 'Total Count' : 'China Count'))
+            .attr("y", (d) => yScale(d))
+            .attr("width", xScale.bandwidth())
+            .attr("height", (d) => 400 - yScale(d))
+            .attr("fill", (d, i) => i === 0 ? "blue" : "red");
+
+        // Add labels to the bars
+        svg.selectAll("text")
+            .data([totalCount, chinaCount])
+            .enter()
+            .append("text")
+            .attr("x", (d, i) => xScale(i === 0 ? 'Total Count' : 'China Count') + xScale.bandwidth() / 2)
+            .attr("y", (d) => yScale(d) - 10)
+            .attr("text-anchor", "middle")
+            .text((d) => d);
+    };
+
+
     const [wordCloudData, setWordCloudData] = useState([]);
     const [wordCloudDataEn, setWordCloudDataEn] = useState([]);
 
@@ -60,7 +101,38 @@ const Figures = ({ museumName, figureNo }) => {
     };
 
     useEffect(() => {
-        if (figureNo === 2) {
+        if (figureNo === 1) {
+            console.log('Figure 1');
+            const fetchData = async () => {
+                try {
+                    const response = await fetch("http://localhost:5000/get_data");
+                    const data = await response.json();
+
+                    // Filter the data based on the museum name
+                    const filteredData = data.filter((item) => item['博物馆'] === museumName);
+
+                    const counts = filteredData.length;
+                    console.log('Total number of items: ', counts);
+
+                    const chinaCounts = filteredData.filter((item) => item['来源地'].includes('China')).length;
+
+                    console.log('Number of items from China: ', chinaCounts);
+
+                    setTotalCount(counts);
+                    setChinaCount(chinaCounts);
+
+                } catch (error) {
+                    console.error('Error fetching data: ', error);
+                }
+            };
+
+            fetchData();
+
+            drawCollection();
+        }
+
+
+        else if (figureNo === 2) {
             console.log('Figure 2');
 
             // Fetch data from the server
@@ -144,15 +216,19 @@ const Figures = ({ museumName, figureNo }) => {
         }
     }, [figureNo]);
 
-    // Make sure to add an SVG container with id "word-cloud" in your JSX/HTML
-    return (
-        <>
+    if (figureNo === 1) {
+        return (
+            <svg id="collection" width={1000} height={500} style={{margin: '30px'}}></svg>
+        );
+    }
+    else if (figureNo === 2) {
+        return (
             <div style={{ display: 'flex' }}>
                 <svg id="word-cloud-zn" width={500} height={500}></svg>
                 <svg id="word-cloud-en" width={500} height={500}></svg>
             </div>
-        </>
-    );
+        );
+    }
 }
 
 export default Figures;
