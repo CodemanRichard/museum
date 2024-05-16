@@ -9,38 +9,47 @@ const Figures = ({ museumName, figureNo }) => {
     const drawCollection = () => {
         // Select the SVG container
         const svg = d3.select("#collection");
-
-        // Set up the scales for the bar chart
-
-        const xScale = d3.scaleBand()
-            .domain(['Total Count', 'China Count'])
-            .range([0, 400])
-            .padding(0.1);
-
-        const yScale = d3.scaleLinear()
-            .domain([0, totalCount])
-            .range([400, 0]);
-
-        // Draw the bars
-        svg.selectAll("rect")
-            .data([totalCount, chinaCount])
+        // Calculate the data for the pie chart
+        const pieData = [
+            { label: 'China Count', value: chinaCount },
+            { label: 'Other Count', value: totalCount - chinaCount }
+        ];
+        // Create a legend for the pie chart
+        const legend = svg
+            .selectAll(".legend")
+            .data(pieData)
             .enter()
+            .append("g")
+            .attr("class", "legend")
+            .attr("transform", (d, i) => `translate(400, ${i * 30})`);
+
+        // Add colored squares to the legend
+        legend
             .append("rect")
-            .attr("x", (d, i) => xScale(i === 0 ? 'Total Count' : 'China Count'))
-            .attr("y", (d) => yScale(d))
-            .attr("width", xScale.bandwidth())
-            .attr("height", (d) => 400 - yScale(d))
-            .attr("fill", (d, i) => i === 0 ? "blue" : "red");
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("fill", (d, i) => (i === 0 ? "red" : "blue"));
 
-        // Add labels to the bars
-        svg.selectAll("text")
-            .data([totalCount, chinaCount])
-            .enter()
+        // Add labels to the legend
+        legend
             .append("text")
-            .attr("x", (d, i) => xScale(i === 0 ? 'Total Count' : 'China Count') + xScale.bandwidth() / 2)
-            .attr("y", (d) => yScale(d) - 10)
-            .attr("text-anchor", "middle")
-            .text((d) => d);
+            .attr("x", 30)
+            .attr("y", 15)
+            .text((d) => d.label);
+        // Set up the pie chart layout
+        const pie = d3.pie().value(d => d.value);
+
+        // Set up the arc generator
+        const arc = d3.arc().innerRadius(0).outerRadius(200);
+
+        // Draw the pie slices
+        svg.selectAll("path")
+            .data(pie(pieData))
+            .enter()
+            .append("path")
+            .attr("d", arc)
+            .attr("fill", (d, i) => i === 0 ? "red" : "blue")
+            .attr("transform", "translate(200, 200)");
     };
 
 
