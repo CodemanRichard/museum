@@ -22,5 +22,9 @@ def init():
 def test():
     return str(num_rows)
 
+@app.route('/get_data')
+def get_data():
+    return df.to_json(orient='records')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
