@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import math
 import pandas as pd
+from collections import Counter 
 
 import json
 import os
@@ -25,6 +26,12 @@ def test():
 @app.route('/get_data')
 def get_data():
     return df.to_json(orient='records')
+
+@app.route('/get_museum_sum')
+def get_museum_sum():
+    print(jsonify(Counter(df["博物馆"])))
+    
+    return jsonify(Counter(df["博物馆"]))
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
