@@ -110,7 +110,7 @@ function Map({ changeProps }) {
             // for(let i=0;i<Math.ceil(Math.log(data[p[0]]));i++){
             //   c.push(1)
             // }
-            items.push(Math.ceil(Math.log(data[p[0]])))
+            items.push(data[p[0]])
             new_icon_list.push(
               new L.Icon({
                 iconUrl: logo_img_list[Math.ceil(Math.log(data[p[0]]))],
@@ -186,6 +186,7 @@ function Map({ changeProps }) {
           } */}
           <Popup>
             <a href={urls[index]}>{point[0]}</a>
+            <p>藏品 {item_num[index]} 件</p>
           </Popup>
         </Marker>
       ))}
