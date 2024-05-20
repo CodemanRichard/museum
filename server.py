@@ -29,9 +29,40 @@ def get_data():
 
 @app.route('/get_museum_sum')
 def get_museum_sum():
-    print(jsonify(Counter(df["博物馆"])))
     
     return jsonify(Counter(df["博物馆"]))
+
+@app.route('/get_museum_sum_China')
+def get_museum_sum_China():
+    china_count={}
+
+    for dd,bb in zip(df["来源地"],df["博物馆"]):
+        if china_count.get(bb,-1)==-1:
+            china_count[bb]=0
+        if dd.find("Chin")!=-1 or bb.find("故宫")!=-1:
+            china_count[bb]=china_count[bb]+1
+    print(f"china {china_count}")
+    return jsonify(china_count)
+
+
+@app.route('/get_dot_map')
+def get_dot_map():
+    rt={}
+    ffd={}
+    for lat,long,ff in zip(df["latitude"],df["longitude"],df["来源地"]):
+        if isinstance(lat,str) or isinstance(long,str):
+            continue
+        ffd[(lat,long)]=ff
+        if(rt.get((lat,long),-1)==-1):
+            rt[(lat,long)]=0
+        rt[(lat,long)]+=1
+    print(rt)
+
+    tt=[]
+    for r in rt.keys():
+        tt.append([r[0],r[1],rt[r],ffd[r]])
+
+    return jsonify(tt)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

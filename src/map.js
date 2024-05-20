@@ -5,8 +5,12 @@ import {
   Marker,
   Popup,
   useMapEvents,
+  Circle,
+  CircleMarker,
+  LayersControl,
+  LayerGroup
 } from "react-leaflet";
-import L, { marker } from "leaflet";
+import L, { marker,circle } from "leaflet";
 
 import "./map.css";
 import "leaflet/dist/leaflet.css";
@@ -24,8 +28,20 @@ import logo8 from "./logos/logo 8.png"
 import logo9 from "./logos/logo 9.png"
 import logo10 from "./logos/logo 10.png"
 
+import logo1b from "./logos/logo 1b.png"
+import logo2b from "./logos/logo 2b.png"
+import logo3b from "./logos/logo 3b.png"
+import logo4b from "./logos/logo 4b.png"
+import logo5b from "./logos/logo 5b.png"
+import logo6b from "./logos/logo 6b.png"
+import logo7b from "./logos/logo 7b.png"
+import logo8b from "./logos/logo 8b.png"
+import logo9b from "./logos/logo 9b.png"
+import logo10b from "./logos/logo 10b.png"
+
 
 import { useEffect, useState, useRef } from 'react';
+import { color } from "d3";
 
 
 const customIcon = new L.Icon({
@@ -34,6 +50,20 @@ const customIcon = new L.Icon({
   iconAnchor: [10, 10],
   popupAnchor: [0, 0],
 });
+
+const logo_img_list_b=[
+  logo0,
+  logo1b,
+  logo2b,
+  logo3b,
+  logo4b,
+  logo5b,
+  logo6b,
+  logo7b,
+  logo8b,
+  logo9b,
+  logo10b
+]
 
 const logo_img_list=[
   logo0,
@@ -88,20 +118,37 @@ const Gap=20
 
 const Line_cap=5
 
+const circ_opt={
+  fillColor:"red",
+  // color:"red"
+}
+
+
+function size_mapping(count){
+  if(count>70){
+    return 70
+  }
+  return count
+}
 
 
 function Map({ changeProps }) {
   const [item_num, set_item_num] = useState([0,0,0,0,0,0,0,0]);
+  const [shina_item_num, set_china_item_num] = useState([0,0,0,0,0,0,0,0]);
   const [icon_list,set_icon_list]=useState([customIcon,customIcon,customIcon,customIcon,customIcon,customIcon,customIcon,customIcon])
+  const [china_icon_list,set_china_icon_list]=useState([customIcon,customIcon,customIcon,customIcon,customIcon,customIcon,customIcon,customIcon])
 
-
+  const [dotmap,set_dotmap]=useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
           const response = await fetch("http://localhost:5000/get_museum_sum");
           const data = await response.json();
-          console.log(data)
+          const response_c=await fetch("http://localhost:5000//get_museum_sum_China");
+          const data_c = await response_c.json();
+
+          // console.log(data)
           let items=[]
           let new_icon_list=[]
           for(let p of points){
@@ -113,17 +160,41 @@ function Map({ changeProps }) {
             items.push(data[p[0]])
             new_icon_list.push(
               new L.Icon({
-                iconUrl: logo_img_list[Math.ceil(Math.log(data[p[0]]))],
+                iconUrl: logo_img_list_b[Math.ceil(Math.log(data[p[0]]+1))],
                 iconSize: [logo_size, logo_size],
-                iconAnchor: [10, 10],
-                popupAnchor: [0, 0],
+                iconAnchor: [logo_size/2, logo_size/2],
+                popupAnchor: [logo_size/2, logo_size/2],
               })
           
             )
           }
+          
+          // console.log(data_c)
+
+          let china_item=[]
+          let new_china_icon_list=[]
+          for(let p of points){
+            china_item.push(data_c[p[0]])
+            let ratio=(data_c[p[0]]/data[p[0]])
+            // console.log(ratio)
+            new_china_icon_list.push(
+              new L.Icon({
+                iconUrl: logo_img_list[Math.ceil(ratio*Math.ceil(Math.log(data[p[0]]+1)))],
+                iconSize: [logo_size, logo_size],
+                iconAnchor: [logo_size/2, logo_size/2],
+                popupAnchor: [logo_size/2, logo_size/2],
+              })
+            )
+          }
+
+          
+          set_china_item_num(china_item)
+          set_china_icon_list(new_china_icon_list)
+          // console.log(china_item)
+
           set_item_num(items)
           set_icon_list(new_icon_list)
-          console.log(items)
+          
           
 
           
@@ -132,6 +203,32 @@ function Map({ changeProps }) {
       }
     }
     fetchData();
+  },[urls])
+
+  useEffect(() => {
+    const ff=async ()=>{
+      try{
+        const response=await fetch("http://localhost:5000//get_dot_map");
+        // console.log(response)
+        const data = await response.json();
+        
+
+        let rt=[]
+        for(let d of data){
+          let ss=d[3].split("(")
+          // console.log(ss)
+
+          rt.push([d[0],d[1],d[2],ss[0]])
+        }
+
+        set_dotmap(rt)
+        // console.log(rt)
+
+      }catch(e){
+        console.log(e)
+      }
+    }
+    ff()
   },[urls])
   
 
@@ -149,6 +246,7 @@ function Map({ changeProps }) {
       
     }
     
+    
   };
   function clickHandler(name) {
     handleMuseumChange(name);
@@ -164,33 +262,61 @@ function Map({ changeProps }) {
         url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       />
+      <LayersControl position="topright">
+      <LayersControl.Overlay checked  name="博物馆">
+      <LayerGroup>
       {points.map((point, index) => (
+        <>
+        <Marker 
+        key={index+100}
+        position={[point[1], point[2]]}
+        icon={icon_list[index]}
+        
+        riseOnHover={false}
+      >
+      </Marker>
         <Marker
           key={index}
           position={[point[1], point[2]]}
-          icon={icon_list[index]}
+          icon={china_icon_list[index]}
           eventHandlers={{ click: () => clickHandler(point[0]) }}
           riseOnHover={true}
         >
-          {/* {
-            item_num[index].map((val,ind)=>(
-              <Marker
-                key={index+100*ind}
-                position={[point[1], point[2]]}
-                icon={customIcon}
-                
-                riseOnHover={true}
-              >
-              </Marker>
-            ))
-          } */}
+          
           <Popup>
             <a href={urls[index]}>{point[0]}</a>
             <p>藏品 {item_num[index]} 件</p>
+            <p>{shina_item_num[index]} 件来自中国</p>
           </Popup>
         </Marker>
+
+        
+      </>
       ))}
+</LayerGroup>
+      </LayersControl.Overlay>
+      <LayersControl.Overlay checked  name="文物发现地点">
+      <LayerGroup>
+      {dotmap.map((dot,index)=>(
+        
+        <CircleMarker
+    
+          // key={index*109}
+          center={[dot[0],dot[1]]}
+          radius={size_mapping(dot[2])}
+          pathOptions={circ_opt}
+        >
+          <Popup>{dot[2]} 件来自 {dot[3]}</Popup>
+        </CircleMarker>
+      ))}
+</LayerGroup>
+      </LayersControl.Overlay>
+    </LayersControl>
+      
+      
+      
       <ZoomHandler onZoomEnd={handleZoom} />
+      
     </MapContainer>
   );
 }
