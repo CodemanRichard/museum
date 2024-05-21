@@ -6,6 +6,7 @@ import Figures from './figures.js';
 import { useState } from 'react';
 import Years from './years'
 import Gallery from './Gallery.js';
+import Compare from './Compare.js';
 
 function App() {
   const [props, setProps] = useState('the V&A');
@@ -28,7 +29,7 @@ function App() {
     <div className='irregular-box box5'><WordCloud changeFigure={changeFigure}/></div>
     <div className='irregular-box box6'><Years changeFigure={changeFigure}/></div>
     <div className='irregular-box box7'><Figures museumName={props} figureNo={figure}/></div>
-    <div className='irregular-box box8'>文物随机对比</div>
+    <div className='irregular-box box8'><Compare/></div>
     </>
   );
 }

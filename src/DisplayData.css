@@ -1,0 +1,27 @@
+.u-flex {
+    display: flex;
+    text-align: center;
+}
+
+.left-display {
+    flex: 1;
+}
+
+.right-display {
+    flex: 1;
+}
+
+.image-display {
+    padding-top: 1.5%;
+    padding-bottom: 5%;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    cursor: pointer;
+    align-items: center;
+}
+
+.image-name {
+    padding-bottom: 3%;
+    font-weight: bold;
+}
