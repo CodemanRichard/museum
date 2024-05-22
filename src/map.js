@@ -182,7 +182,7 @@ function Map({ changeProps }) {
                 iconUrl: logo_img_list[Math.ceil(ratio*Math.ceil(Math.log(data[p[0]]+1)))],
                 iconSize: [logo_size, logo_size],
                 iconAnchor: [logo_size/2, logo_size/2],
-                popupAnchor: [logo_size/2, logo_size/2],
+                popupAnchor: [0, -10],
               })
             )
           }

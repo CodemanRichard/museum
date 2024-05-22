@@ -7,6 +7,7 @@ import { useState } from 'react';
 import Years from './years'
 import Gallery from './Gallery.js';
 import Compare from './Compare.js';
+import Title from './Title.js';
 
 function App() {
   const [props, setProps] = useState('the V&A');
@@ -22,7 +23,7 @@ function App() {
 
   return (
     <>
-    <div className='irregular-box box1'>logo与标题</div>
+    <div className='irregular-box box1'><Title museumName={props}/></div>
     <div className='irregular-box box2'><Map changeProps={changeProps}/></div>
     <div className='irregular-box box3'><Gallery museumName={props}/></div>
     <div className='irregular-box box4'><Collection changeFigure={changeFigure}/></div>
