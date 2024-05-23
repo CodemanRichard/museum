@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import * as d3 from 'd3';
-import * as cloud from 'd3-cloud';
 import ReactEcharts from 'echarts-for-react';
+import ReactWordcloud from 'react-wordcloud';
+import './figures.css';
 
 const Figures = ({ museumName, figureNo }) => {
     const [totalCount, setTotalCount] = useState(0);
@@ -57,122 +58,68 @@ const Figures = ({ museumName, figureNo }) => {
     const [wordCloudData, setWordCloudData] = useState([]);
     const [wordCloudDataEn, setWordCloudDataEn] = useState([]);
 
-    const drawWordCloud = () => {
-        // Select the SVG container
-        const svg = d3.select("#word-cloud-zn");
-
-        // Define the layout for the word cloud
-        const layout = cloud()
-            .size([500, 500]) // Set the size of the word cloud
-            .words(wordCloudData)
-            .padding(5) // Set the padding between words
-            .rotate(() => Math.random() * 90) // Randomly rotate the words
-            .fontSize((d) => d.size) // Set the font size based on the data
-
-        // Generate the word cloud layout
-        layout.start();
-
-        // Render the word cloud
-        svg
-            .selectAll("text")
-            .data(wordCloudData)
-            .enter()
-            .append("text")
-            .style("font-size", (d) => d.size + "px")
-            .style("fill", "black")
-            .attr("x", (d) => d.x + 250)
-            .attr("y", (d) => d.y + 250)
-            .attr("text-anchor", "middle")
-            .text((d) => d.text);
-
-        //en
-        const svgEn = d3.select("#word-cloud-en");
-
-        const layoutEn = cloud()
-            .size([500, 500])
-            .words(wordCloudDataEn)
-            .padding(5)
-            .rotate(() => Math.random() * 90)
-            .fontSize((d) => d.size)
-
-        layoutEn.start();
-
-        svgEn
-            .selectAll("text")
-            .data(wordCloudDataEn)
-            .enter()
-            .append("text")
-            .style("font-size", (d) => d.size + "px")
-            .style("fill", "black")
-            .attr("x", (d) => d.x + 250)
-            .attr("y", (d) => d.y + 250)
-            .attr("text-anchor", "middle")
-            .text((d) => d.text);
-    };
-
-    const [ChinaData, setChianData] = useState([]);
+    const [ChinaData, setChinaData] = useState([]);
     const [ForeignData, setForeignData] = useState([]);
     const option = {
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'line',
-            lineStyle: {
-              color: 'rgba(0,0,0,0.2)',
-              width: 1,
-              type: 'solid'
+            trigger: 'axis',
+            axisPointer: {
+                type: 'line',
+                lineStyle: {
+                    color: 'rgba(0,0,0,0.2)',
+                    width: 1,
+                    type: 'solid'
+                }
             }
-          }
         },
         legend: {
-          data: ['中国', '国外']
+            data: ['中国', '国外']
         },
         singleAxis: {
-          top: 5,
-          bottom: 5,
-          axisTick: {},
-          axisLabel: {},
-          type: 'value',
-          axisPointer: {
-            animation: true,
-            label: {
-              show: true
+            top: 5,
+            bottom: 5,
+            axisTick: {},
+            axisLabel: {},
+            type: 'value',
+            axisPointer: {
+                animation: true,
+                label: {
+                    show: true
+                },
             },
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              type: 'dashed',
-              opacity: 0.2
-            }
-          },
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    type: 'dashed',
+                    opacity: 0.2
+                }
+            },
         },
         series: [
-          {
-            type: 'themeRiver',
-            smooth: true,
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 20,
-                shadowColor: 'rgba(0, 0, 0, 0.8)'
-              }
+            {
+                type: 'themeRiver',
+                smooth: true,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 20,
+                        shadowColor: 'rgba(0, 0, 0, 0.8)'
+                    }
+                },
+                data: ChinaData
             },
-            data: ChinaData
-          },
-          {
-            type: 'themeRiver',
-            smooth: true,
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 20,
-                shadowColor: 'rgba(0, 0, 0, 0.8)'
-              }
-            },
-            data: ForeignData
-          }
+            {
+                type: 'themeRiver',
+                smooth: true,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 20,
+                        shadowColor: 'rgba(0, 0, 0, 0.8)'
+                    }
+                },
+                data: ForeignData
+            }
         ]
-      };
-
+    };
     useEffect(() => {
         if (figureNo === 1) {
             console.log('Figure 1');
@@ -218,12 +165,13 @@ const Figures = ({ museumName, figureNo }) => {
                     // [{博物馆: 'the V&A', ID: 1003, Main_ID: 1003, 版权声明: 'Copyright: © Victor...}, ...]
 
                     // Filter the data based on the museum name
-                    const filteredData = data.filter((item) => item['博物馆'] === museumName);
+                    const filteredData = data.filter((item) => item['博物馆'] === museumName && item['country'] === 'China');
+                    const filteredDataEn = data.filter((item) => item['博物馆'] === museumName && item['country'] !== 'China');
 
 
                     // Split the keywords and count their occurrences
                     const keywords = filteredData.flatMap(item => item['Metadata_ZN']);
-                    const keywordsEn = filteredData.flatMap(item => item['Metadata_EN']);
+                    const keywordsEn = filteredDataEn.flatMap(item => item['Metadata_ZN']);
                     // console.log(keywords);
                     const keywordCounts = keywords.reduce((counts, keyword) => {
                         const splitKeywords = keyword.split(";");
@@ -247,18 +195,18 @@ const Figures = ({ museumName, figureNo }) => {
 
                     // Convert keyword counts to word cloud data
                     const wordCloudData = Object.entries(keywordCounts)
-                        .map(([text, count]) => ({ text, size: count }))
-                        .sort((a, b) => b.size - a.size)
+                        .map(([text, count]) => ({ text, value: count }))
+                        .sort((a, b) => b.value - a.value)
                         .slice(0, 20);
 
                     const wordCloudDataEn = Object.entries(keywordCountsEn)
-                        .map(([text, count]) => ({ text, size: count }))
-                        .sort((a, b) => b.size - a.size)
+                        .map(([text, count]) => ({ text, value: count }))
+                        .sort((a, b) => b.value - a.value)
                         .slice(0, 20);
 
                     // Get the maximum size from the keywordArray
-                    const maxSize = wordCloudData[0].size;
-                    const maxSizeEn = wordCloudDataEn[0].size;
+                    const maxSize = Math.max(...wordCloudData.map((keyword) => keyword.value));
+                    const maxSizeEn = Math.max(...wordCloudDataEn.map((keyword) => keyword.value));
 
                     // Scale the sizes of the keywords to fit the word cloud
                     const sizeScale = d3.scaleLinear().domain([0, maxSize]).range([10, 100]);
@@ -266,25 +214,24 @@ const Figures = ({ museumName, figureNo }) => {
 
                     // Update the size property of each keyword object
                     wordCloudData.forEach((keyword) => {
-                        keyword.size = sizeScale(keyword.size);
+                        keyword.value = sizeScale(keyword.value);
                     });
                     wordCloudDataEn.forEach((keyword) => {
-                        keyword.size = sizeScaleEn(keyword.size);
+                        keyword.value = sizeScaleEn(keyword.value);
                     });
-
-                    console.log('Word cloud data: ', wordCloudData);
-                    console.log('Word cloud data en: ', wordCloudDataEn);
 
                     setWordCloudData(wordCloudData);
                     setWordCloudDataEn(wordCloudDataEn);
+
+                    console.log('Word cloud data: ', wordCloudData);
+                    console.log('Word cloud data En: ', wordCloudDataEn);
+
                 } catch (error) {
                     console.error('Error fetching data: ', error);
                 }
             };
 
             fetchData();
-
-            drawWordCloud();
 
         }
 
@@ -294,36 +241,36 @@ const Figures = ({ museumName, figureNo }) => {
                     const response = await fetch("http://localhost:5000/get_data");
                     const data = await response.json();
                     var filteredData = []
-                    if(museumName){
-                       filteredData = data.filter((item) => item['博物馆'] === museumName);
-                    } else{
+                    if (museumName) {
+                        filteredData = data.filter((item) => item['博物馆'] === museumName);
+                    } else {
                         filteredData = data
                     }
                     const withChina = [];
                     const withoutChina = [];
 
                     filteredData.forEach(item => {
-                    if (item['country'] && item['country'].includes('China')) {
-                        withChina.push(item);
-                    } else {
-                        withoutChina.push(item);
-                    }
+                        if (item['country'] && item['country'].includes('China')) {
+                            withChina.push(item);
+                        } else {
+                            withoutChina.push(item);
+                        }
                     });
                     const withChina_data = withChina.flatMap(item => item['起始年']);
                     const withoutChina_data = withoutChina.flatMap(item => item['起始年']);
                     const withChina_yearCounts = withChina_data.reduce((accumulator, year) => {
                         accumulator[year] = (accumulator[year] || 0) + 1;
                         return accumulator;
-                    },{})
+                    }, {})
                     const withoutChina_yearCounts = withoutChina_data.reduce((accumulator, year) => {
                         accumulator[year] = (accumulator[year] || 0) + 1;
                         return accumulator;
-                    },{})
+                    }, {})
                     const withChina_count_data = Object.keys(withChina_yearCounts).map(key => [key, withChina_yearCounts[key], '中国']);
                     const withoutChina_count_data = Object.keys(withoutChina_yearCounts).map(key => [key, withoutChina_yearCounts[key], '国外']);
                     console.log(withChina_count_data)
                     console.log(withoutChina_count_data)
-                    setChianData(withChina_count_data)
+                    setChinaData(withChina_count_data)
                     setForeignData(withoutChina_count_data)
                 } catch (error) {
                     console.error('Error fetching data: ', error);
@@ -334,24 +281,56 @@ const Figures = ({ museumName, figureNo }) => {
         }
     }, [figureNo]);
 
+
+    const callbacks = {
+        getWordColor: word => {
+            const colorScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range(["blue", "darkblue"]);
+            return colorScale(word.value);
+        },
+    }
+    const options = {
+        rotations: 2,
+        rotationAngles: [-45, 0, 45],
+    };
+    const size = [500, 500];
+
+
     if (figureNo === 1) {
         return (
-            <svg id="collection" width={1000} height={500} style={{margin: '30px'}}></svg>
+            <svg id="collection" width={1000} height={500} style={{ margin: '30px' }}></svg>
         );
     }
     else if (figureNo === 2) {
         return (
             <div style={{ display: 'flex' }}>
-                <svg id="word-cloud-zn" width={500} height={500}></svg>
-                <svg id="word-cloud-en" width={500} height={500}></svg>
+                <div style={{ width: '50%' }}>
+                    <div className='title'>中国馆藏关键词</div>
+                    <ReactWordcloud
+                        callbacks={callbacks}
+                        options={options}
+                        size={size}
+                        words={wordCloudData}
+                    />
+                </div>
+                <div style={{ width: '50%' }}>
+                    <div className='title'>外国馆藏关键词</div>
+                    <ReactWordcloud
+                        callbacks={callbacks}
+                        options={options}
+                        size={size}
+                        words={wordCloudDataEn}
+                    />
+                </div>
             </div>
         );
     }
     else if (figureNo === 3) {
-        return(
+        return (
             <div>
                 <h3>生产年代</h3>
-                <ReactEcharts option={option}/>
+                <ReactEcharts option={option} />
             </div>
         )
     }
