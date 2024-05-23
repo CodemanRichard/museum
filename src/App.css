@@ -25,10 +25,10 @@
 .box4 {
   top: 0%;
   left: 60%;
-  width: 13.33%;
-  height: 10%;
+  width: 40%;
+  height: 5%;
 }
-.box5 {
+/* .box5 {
   top: 0%;
   left: 73.33%;
   width: 13.33%;
@@ -39,12 +39,12 @@
   left: 86.66%;
   width: 13.33%;
   height: 10%;
-}
+} */
 .box7 {
-  top: 10%;
+  top: 5%;
   left: 60%;
   width: 40%;
-  height: 45%;
+  height: 50%;
 }
 .box8 {
   top: 55%;

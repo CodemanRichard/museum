@@ -290,7 +290,6 @@ const Figures = ({ museumName, figureNo }) => {
     };
     const size = [500, 400];
 
-
     if (figureNo === 1) {
         return (
             <div>
@@ -306,7 +305,12 @@ const Figures = ({ museumName, figureNo }) => {
                     <div className='title'>中国馆藏关键词</div>
                     <ReactWordcloud
                         callbacks={callbacks}
-                        options={options}
+                        options={{
+                            ...options,
+                            fontFamily: 'Arial',
+                            fontWeight: 'bold',
+                            fontSizes: [30, 80],
+                        }}
                         size={size}
                         words={wordCloudData}
                     />
@@ -315,7 +319,12 @@ const Figures = ({ museumName, figureNo }) => {
                     <div className='title'>外国馆藏关键词</div>
                     <ReactWordcloud
                         callbacks={callbacks}
-                        options={options}
+                        options={{
+                            ...options,
+                            fontFamily: 'Arial',
+                            fontWeight: 'bold',
+                            fontSizes: [30, 80],
+                        }}
                         size={size}
                         words={wordCloudDataEn}
                     />
@@ -326,7 +335,7 @@ const Figures = ({ museumName, figureNo }) => {
     else if (figureNo === 3) {
         return (
             <div>
-                <h3>生产年代</h3>
+                <div className='title'>生产年代</div>
                 <ReactEcharts option={option} />
             </div>
         )
