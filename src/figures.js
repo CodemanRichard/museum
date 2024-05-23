@@ -5,54 +5,43 @@ import ReactWordcloud from 'react-wordcloud';
 import './figures.css';
 
 const Figures = ({ museumName, figureNo }) => {
-    const [totalCount, setTotalCount] = useState(0);
-    const [chinaCount, setChinaCount] = useState(0);
+    const [pieData, setPieData] = useState([]);
 
-    const drawCollection = () => {
-        // Select the SVG container
-        const svg = d3.select("#collection");
-        // Calculate the data for the pie chart
-        const pieData = [
-            { label: 'China Count', value: chinaCount },
-            { label: 'Other Count', value: totalCount - chinaCount }
-        ];
-        // Create a legend for the pie chart
-        const legend = svg
-            .selectAll(".legend")
-            .data(pieData)
-            .enter()
-            .append("g")
-            .attr("class", "legend")
-            .attr("transform", (d, i) => `translate(400, ${i * 30})`);
-
-        // Add colored squares to the legend
-        legend
-            .append("rect")
-            .attr("width", 20)
-            .attr("height", 20)
-            .attr("fill", (d, i) => (i === 0 ? "red" : "blue"));
-
-        // Add labels to the legend
-        legend
-            .append("text")
-            .attr("x", 30)
-            .attr("y", 15)
-            .text((d) => d.label);
-        // Set up the pie chart layout
-        const pie = d3.pie().value(d => d.value);
-
-        // Set up the arc generator
-        const arc = d3.arc().innerRadius(0).outerRadius(200);
-
-        // Draw the pie slices
-        svg.selectAll("path")
-            .data(pie(pieData))
-            .enter()
-            .append("path")
-            .attr("d", arc)
-            .attr("fill", (d, i) => i === 0 ? "red" : "blue")
-            .attr("transform", "translate(200, 200)");
+    const pieOption = {
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 10,
+            data: Object.keys(pieData)
+        },
+        series: [
+            {
+                name: 'Country',
+                type: 'pie',
+                radius: ['50%', '70%'],
+                avoidLabelOverlap: false,
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: '30',
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: Object.entries(pieData).map(([country, count]) => ({ name: country, value: count }))
+            }
+        ]
     };
+
 
 
     const [wordCloudData, setWordCloudData] = useState([]);
@@ -134,12 +123,19 @@ const Figures = ({ museumName, figureNo }) => {
                     const counts = filteredData.length;
                     console.log('Total number of items: ', counts);
 
-                    const chinaCounts = filteredData.filter((item) => item['来源地'].includes('China')).length;
+                    const countryCounts = filteredData.reduce((counts, item) => {
+                        const country = item['country'];
+                        counts[country] = (counts[country] || 0) + 1;
+                        return counts;
+                    }, {});
 
-                    console.log('Number of items from China: ', chinaCounts);
+                    delete countryCounts['——'];
+                    delete countryCounts['null'];
 
-                    setTotalCount(counts);
-                    setChinaCount(chinaCounts);
+                    setPieData(countryCounts)
+
+                    console.log('Country counts: ', countryCounts);
+
 
                 } catch (error) {
                     console.error('Error fetching data: ', error);
@@ -147,8 +143,6 @@ const Figures = ({ museumName, figureNo }) => {
             };
 
             fetchData();
-
-            drawCollection();
         }
 
 
@@ -294,13 +288,16 @@ const Figures = ({ museumName, figureNo }) => {
         rotations: 2,
         rotationAngles: [-45, 0, 45],
     };
-    const size = [500, 500];
+    const size = [500, 400];
 
 
     if (figureNo === 1) {
         return (
-            <svg id="collection" width={1000} height={500} style={{ margin: '30px' }}></svg>
-        );
+            <div>
+                <div className='title'>藏品来源国家</div>
+                <ReactEcharts option={pieOption} />
+            </div>
+        )
     }
     else if (figureNo === 2) {
         return (
