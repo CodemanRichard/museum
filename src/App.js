@@ -1,10 +1,7 @@
 import './App.css';
 import Map from './map.js';
-import WordCloud from './wordCloud.js';
-import Collection from './collection.js';
 import Figures from './figures.js';
 import { useState } from 'react';
-import Years from './years'
 import Gallery from './Gallery.js';
 import Compare from './Compare.js';
 import Title from './Title.js';

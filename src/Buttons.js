@@ -9,7 +9,7 @@ const Collection = ({ changeFigure }) => {
 
     const handleClick2 = () => {
         changeFigure(2);
-        console.log('词云');
+        console.log('关键词');
     };
 
     const handleClick3 = () => {
@@ -24,16 +24,16 @@ const Collection = ({ changeFigure }) => {
 
     const handleClick5 = () => {
         changeFigure(5);
-        console.log('三选一');
+        console.log('分类/材质/技法');
     }
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
             <button className='button' onClick={handleClick1}>馆藏</button>
-            <button className='button' onClick={handleClick2}>词云</button>
+            <button className='button' onClick={handleClick2}>关键词</button>
             <button className='button' onClick={handleClick3}>生产年代</button>
             <button className='button' onClick={handleClick4}>尺寸</button>
-            <button className='button' onClick={handleClick5}>三选一</button>
+            <button className='button' onClick={handleClick5}>分类/材质/技法</button>
         </div>
     );
 }
