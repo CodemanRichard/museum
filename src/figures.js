@@ -273,7 +273,7 @@ const Figures = ({ museumName, figureNo }) => {
             fetchData();
 
         }
-    }, [figureNo]);
+    }, [figureNo, museumName]);
 
 
     const callbacks = {
