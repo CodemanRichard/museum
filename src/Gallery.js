@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ImageGallery from "./ImageGallery";
 import Window from "./Window";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { Pagination } from "antd";  // 引入 Pagination 组件
 import "./Gallery.css";
 
 const properties = [
@@ -66,24 +66,16 @@ function Gallery({ museumName }) {
     });
   }, [museumName]);
 
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);  // 现在使用从1开始的页码
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const imagesPerPage = 4;
-  const startIndex = currentPage * imagesPerPage;
+  const startIndex = (currentPage - 1) * imagesPerPage;  // 计算起始索引时减去1
   const selectedImages = images.slice(startIndex, startIndex + imagesPerPage);
 
-  const handleNextPage = () => {
-    if (startIndex + imagesPerPage < images.length) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const handleImageClick = (image) => {
@@ -103,8 +95,15 @@ function Gallery({ museumName }) {
         images={selectedImages}
         onImageClick={handleImageClick}
       />
-      <LeftOutlined className="left-button" onClick={handlePrevPage} />
-      <RightOutlined className="right-button" onClick={handleNextPage} />
+      <Pagination
+        current={currentPage}
+        pageSize={imagesPerPage}
+        total={images.length}
+        onChange={handlePageChange}
+        showQuickJumper
+        showSizeChanger={false}
+        className="pagination"
+      />
       {isOpen && <Window image={selectedImage} onClose={closeWindow} />}
     </div>
   );
