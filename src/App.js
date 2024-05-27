@@ -6,6 +6,9 @@ import Gallery from './Gallery.js';
 import Compare from './Compare.js';
 import Title from './Title.js';
 import Buttons from './Buttons.js';
+import Years from './years.js'
+import Collection from './collection.js'
+import WordCloud from './wordcloud.js'
 
 function App() {
   const [props, setProps] = useState('the V&A');
@@ -25,11 +28,10 @@ function App() {
     <div className='irregular-box box2'><Map changeProps={changeProps}/></div>
     <div className='irregular-box box3'><Gallery museumName={props}/></div>
     <div className='irregular-box box4'><Buttons changeFigure={changeFigure}/></div>
-    {/* <div className='irregular-box box4'><Collection changeFigure={changeFigure}/></div> */}
-    {/* <div className='irregular-box box5'><WordCloud changeFigure={changeFigure}/></div> */}
-    {/* <div className='irregular-box box6'><Years changeFigure={changeFigure}/></div> */}
-    <div className='irregular-box box7'><Figures museumName={props} figureNo={figure}/></div>
-    <div className='irregular-box box8'><Compare/></div>
+    <div className='irregular-box box4'><Collection museumName={props}/></div>
+    <div className='irregular-box box5'><WordCloud museumName={props}/></div>
+    <div className='irregular-box box6'><Years museumName={props}/></div>
+    <div className='irregular-box box7'><Figures museumName={props}/></div>
     </>
   );
 }
