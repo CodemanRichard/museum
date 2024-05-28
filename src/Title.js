@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./Title.css";
 
 const museums = [
@@ -12,17 +12,21 @@ const museums = [
   "台北故宫博物馆",
 ];
 
-const logo_size = 70; // 70是比较合适的高度
-
-function Title({museumName}) {
+function Title({museumName, changeProps}) {
+  const handleClick = (clickedMuseum) => {
+    changeProps(clickedMuseum);
+  }
+  const [highlightedMuseum, setHighlightedMuseum] = useState(null);
   return (
     <div className="u-flex">
       {museums.map((museum, index) => (
         <img
           src={require("./museum_logos/" + museum + ".png")}
           alt="logo"
-          height={logo_size}
-          className={`logo ${museumName === museum ? "highlight" : ""}`}
+          onClick={() => handleClick(museum)}
+          onMouseEnter={() => setHighlightedMuseum(museum)}
+          onMouseLeave={() => setHighlightedMuseum(null)}
+          className={`logo ${museumName === museum || highlightedMuseum === museum ? "highlight" : ""}`}
         />
       ))}
     </div>

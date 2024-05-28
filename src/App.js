@@ -21,8 +21,8 @@ function App() {
 
   return (
     <>
-    <div className='irregular-box box1'><Title museumName={props}/></div>
-    <div className='irregular-box box2'><Map changeProps={changeProps}/></div>
+    <div className='irregular-box box1'><Title museumName={props} changeProps={changeProps}/></div>
+    <div className='irregular-box box2'><Map museumName={props} changeProps={changeProps}/></div>
     <div className='irregular-box box3'><Gallery museumName={props}/></div>
     <div className='irregular-box box4'><Buttons changeFigure={changeFigure}/></div>
     {/* <div className='irregular-box box4'><Collection changeFigure={changeFigure}/></div> */}
