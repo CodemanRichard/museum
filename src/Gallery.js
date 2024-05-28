@@ -199,6 +199,9 @@ function Gallery({ museumName }) {
         if(item[selectedDimension] == null || item[selectedDimension] == undefined || item[selectedDimension] == "" || item[selectedDimension] == "——"){
           return;
         }
+        if(selectedDimension === "起始年"){
+          item[selectedDimension] = String(item[selectedDimension]);
+        }
         let values = item[selectedDimension].split(";");
         if (values.includes(value)) {
           newImages.push(imageProperties);
