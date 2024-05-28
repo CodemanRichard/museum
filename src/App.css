@@ -26,25 +26,25 @@
   top: 0%;
   left: 60%;
   width: 40%;
-  height: 5%;
+  height: 25%;
 }
-/* .box5 {
-  top: 0%;
-  left: 73.33%;
-  width: 13.33%;
-  height: 10%;
-}
-.box6 {
-  top: 0%;
-  left: 86.66%;
-  width: 13.33%;
-  height: 10%;
-} */
-.box7 {
-  top: 5%;
+.box5 {
+  top: 25%;
   left: 60%;
   width: 40%;
-  height: 50%;
+  height: 25%;
+}
+.box6 {
+  top: 50%;
+  left: 60%;
+  width: 40%;
+  height: 25%;
+}
+.box7 {
+  top: 75%;
+  left: 60%;
+  width: 40%;
+  height: 25%;
 }
 .box8 {
   top: 55%;

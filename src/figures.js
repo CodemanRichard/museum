@@ -7,6 +7,10 @@ import './figures.css';
 const Figures = ({ museumName, figureNo }) => {
     const [pieData, setPieData] = useState([]);
 
+    const sortedPieData = Object.entries(pieData)
+        .sort((a, b) => b[1] - a[1])
+        .map(([country, count]) => ({ name: country, value: count }));
+
     const pieOption = {
         tooltip: {
             trigger: 'item',
@@ -15,7 +19,7 @@ const Figures = ({ museumName, figureNo }) => {
         legend: {
             orient: 'vertical',
             left: 10,
-            data: Object.keys(pieData)
+            data: sortedPieData.map(({ name }) => name)
         },
         series: [
             {
@@ -37,7 +41,7 @@ const Figures = ({ museumName, figureNo }) => {
                 labelLine: {
                     show: false
                 },
-                data: Object.entries(pieData).map(([country, count]) => ({ name: country, value: count }))
+                data: sortedPieData
             }
         ]
     };
@@ -273,7 +277,7 @@ const Figures = ({ museumName, figureNo }) => {
             fetchData();
 
         }
-    }, [figureNo]);
+    }, [figureNo, museumName]);
 
 
     const callbacks = {
