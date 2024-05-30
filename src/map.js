@@ -41,7 +41,7 @@ import logo10b from "./logos/logo 10b.png"
 
 
 import { useEffect, useState, useRef } from 'react';
-import { color } from "d3";
+// import { color } from "d3";
 
 import Dot_Tree from "./Dot_Tree"
 
@@ -113,16 +113,21 @@ const urls = [
   "https://www.npm.gov.tw/",
 ];
 
-const size_scale=1
-
-const Hover=20
-const Gap=20
-
-const Line_cap=5
+// const size_scale=1
+// 
+// const Hover=20
+// const Gap=20
+// 
+// const Line_cap=5
 
 const circ_opt={
   fillColor:"red",
   // color:"red"
+}
+
+
+function zoom_marker_mapping(ratio){
+  return (ratio-1)/5+1
 }
 
 
@@ -155,6 +160,8 @@ function Map({museumName, changeProps }) {
 
 
   const [dt,set_dt]=useState(null)
+
+  // const [mp,set_mp]=useState(null)
 
   function zoom_to_dot_list(zoom){
     let depth=zoom_depth_mapping(zoom)
@@ -283,11 +290,14 @@ function Map({museumName, changeProps }) {
   };
   const handleZoom = (map) => {
     const newZoom = map.getZoom();
-    const scaleFactor = newZoom / 2;
+    const scaleFactor = zoom_marker_mapping(newZoom / 2);
     let markers = document.getElementsByClassName("leaflet-marker-icon");
     for (let i = 0; i < markers.length; i++) {
       markers[i].style.width = `${logo_size * scaleFactor}px`;
       markers[i].style.height = `${logo_size * scaleFactor}px`;
+      markers[i].style.setProperty("margin-left",`${-logo_size * scaleFactor/2}px`)
+      markers[i].style.setProperty("margin-top", `${-logo_size * scaleFactor/2}px`);
+
       
     }
     zoom_to_dot_list(newZoom)
@@ -296,9 +306,54 @@ function Map({museumName, changeProps }) {
     
   };
   
-  function clickHandler(name) {
+  function clickHandler(name,index) {
     handleMuseumChange(name);
+
+
   }
+
+
+  let museum_markers=points.map((point, index) => (
+    <>
+    <Marker 
+    key={index+100}
+    position={[point[1], point[2]]}
+    icon={icon_list[index]}
+    
+    riseOnHover={false}
+  >
+  </Marker>
+    <Marker
+      key={index}
+      position={[point[1], point[2]]}
+      icon={china_icon_list[index]}
+      eventHandlers={{ click: () => clickHandler(point[0],index) }}
+      riseOnHover={true}
+    >
+      
+      <Popup>
+        <a href={urls[index]}>{point[0]}</a>
+        <p>藏品 {item_num[index]} 件</p>
+        <p>{shina_item_num[index]} 件来自中国</p>
+      </Popup>
+    </Marker>
+
+    
+  </>
+  ))
+
+  console.log("length",museum_markers.length)
+  // let mp=useMapEvents()
+  // for(let p of points){
+  //   if(p[0]==museumName){
+      
+  //     if(mp!=null){
+  //       mp.flyTo([p[1],p[2]],4)
+  //     }
+  //   }
+    
+  // }
+  
 
   return (
     <MapContainer
@@ -313,34 +368,7 @@ function Map({museumName, changeProps }) {
       <LayersControl position="topright">
       <LayersControl.Overlay checked  name="博物馆">
       <LayerGroup>
-      {points.map((point, index) => (
-        <>
-        <Marker 
-        key={index+100}
-        position={[point[1], point[2]]}
-        icon={icon_list[index]}
-        
-        riseOnHover={false}
-      >
-      </Marker>
-        <Marker
-          key={index}
-          position={[point[1], point[2]]}
-          icon={china_icon_list[index]}
-          eventHandlers={{ click: () => clickHandler(point[0]) }}
-          riseOnHover={true}
-        >
-          
-          <Popup>
-            <a href={urls[index]}>{point[0]}</a>
-            <p>藏品 {item_num[index]} 件</p>
-            <p>{shina_item_num[index]} 件来自中国</p>
-          </Popup>
-        </Marker>
-
-        
-      </>
-      ))}
+      {museum_markers}
 </LayerGroup>
       </LayersControl.Overlay>
       <LayersControl.Overlay checked  name="文物发现地点">
@@ -363,20 +391,52 @@ function Map({museumName, changeProps }) {
       
       
       
-      <ZoomHandler onZoomEnd={handleZoom} />
+      <ZoomHandler onZoomEnd={handleZoom} museumName={museumName} mmk={museum_markers}/>
       
     </MapContainer>
   );
 }
 
-function ZoomHandler({ onZoomEnd }) {
+
+
+function ZoomHandler({ onZoomEnd,museumName,mmk}) {
   const map = useMapEvents({
     zoomend: () => {
       onZoomEnd(map);
     },
   });
+  const [mm,set_mm]=useState(museumName)
+  if(mm!=museumName){
+    set_mm(museumName)
+    let crr=0
+    for(let p of points){
+      if(p[0]==museumName){
+      
+        if(map!=null){
+          map.closePopup()
+          // map.
+          // map.popup
+          map.flyTo([p[1],p[2]],5)
+          // map.openPopup(mmk[crr])
+          // mmk[crr].fire("click")
+
+          // map.fire("click",[p[1],p[2]],true)
+          
+        }
+        break
+      }
+      crr+=1
+      
+    }
+    // let ppup = document.getElementsByClassName(`m${crr}`)[0];
+    // console.log("ppup",ppup)
+    // map.openPopup(ppup)
+
+  }
+  // console.log(mmk)
 
   return null;
 }
+
 
 export default Map;
