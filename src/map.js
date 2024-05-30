@@ -43,6 +43,8 @@ import logo10b from "./logos/logo 10b.png"
 import { useEffect, useState, useRef } from 'react';
 import { color } from "d3";
 
+import Dot_Tree from "./Dot_Tree"
+
 
 const customIcon = new L.Icon({
   iconUrl: logo,
@@ -128,17 +130,42 @@ function size_mapping(count){
   if(count>70){
     return 70
   }
+  if(count<5){
+    count=5
+  }
   return count
 }
 
+function zoom_depth_mapping(zoom){
+  let depth=Math.floor(Math.pow(zoom,1.2))
+  if(depth<2){
+    depth=2
+  }
+  return depth
+}
 
-function Map({ changeProps }) {
+
+function Map({museumName, changeProps }) {
   const [item_num, set_item_num] = useState([0,0,0,0,0,0,0,0]);
   const [shina_item_num, set_china_item_num] = useState([0,0,0,0,0,0,0,0]);
   const [icon_list,set_icon_list]=useState([customIcon,customIcon,customIcon,customIcon,customIcon,customIcon,customIcon,customIcon])
   const [china_icon_list,set_china_icon_list]=useState([customIcon,customIcon,customIcon,customIcon,customIcon,customIcon,customIcon,customIcon])
 
   const [dotmap,set_dotmap]=useState([])
+
+
+  const [dt,set_dt]=useState(null)
+
+  function zoom_to_dot_list(zoom){
+    let depth=zoom_depth_mapping(zoom)
+    if(dt==null){
+      console.log("null dt")
+      return
+    }
+    let rt=dt.Report(depth)
+    set_dotmap(rt)
+    console.log(`${zoom}-->${rt.length}\t\tdepth: ${depth}`)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -214,15 +241,33 @@ function Map({ changeProps }) {
         
 
         let rt=[]
+        let l_b=[data[0][0],data[0][1]]
+        let r_t=[data[0][0],data[0][1]]
         for(let d of data){
           let ss=d[3].split("(")
           // console.log(ss)
+          l_b[0]=Math.min(l_b[0],d[0])
+          l_b[1]=Math.min(l_b[1],d[1])
 
-          rt.push([d[0],d[1],d[2],ss[0]])
+          r_t[0]=Math.max(r_t[0],d[0])
+          r_t[1]=Math.max(r_t[1],d[1])
+
+          rt.push([d[0],d[1],d[2],ss[0].split("\n")[0]])
         }
 
-        set_dotmap(rt)
-        // console.log(rt)
+        let new_dt=new Dot_Tree(l_b,r_t)
+
+        rt.forEach((val)=>{
+          new_dt.Register(val)
+        })
+
+        set_dt(new_dt)
+
+        let new_dotmap=new_dt.Report(zoom_depth_mapping(2))
+
+        set_dotmap(new_dotmap)
+
+        // zoom_to_dot_list(2)
 
       }catch(e){
         console.log(e)
@@ -245,9 +290,12 @@ function Map({ changeProps }) {
       markers[i].style.height = `${logo_size * scaleFactor}px`;
       
     }
+    zoom_to_dot_list(newZoom)
+    // console.log(newZoom)
     
     
   };
+  
   function clickHandler(name) {
     handleMuseumChange(name);
   }
@@ -301,7 +349,7 @@ function Map({ changeProps }) {
         
         <CircleMarker
     
-          // key={index*109}
+          key={index*109}
           center={[dot[0],dot[1]]}
           radius={size_mapping(dot[2])}
           pathOptions={circ_opt}

@@ -41,7 +41,7 @@ def get_museum_sum_China():
             china_count[bb]=0
         if dd.find("Chin")!=-1 or bb.find("故宫")!=-1:
             china_count[bb]=china_count[bb]+1
-    print(f"china {china_count}")
+    # print(f"china {china_count}")
     return jsonify(china_count)
 
 
@@ -56,7 +56,7 @@ def get_dot_map():
         if(rt.get((lat,long),-1)==-1):
             rt[(lat,long)]=0
         rt[(lat,long)]+=1
-    print(rt)
+    # print(rt)
 
     tt=[]
     for r in rt.keys():
