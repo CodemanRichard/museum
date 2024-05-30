@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ReactEcharts from 'echarts-for-react';
-// import './years.css'
+import './collection.css'
 
 const Collection = ({ museumName}) => {
   const [pieData, setPieData] = useState([]);

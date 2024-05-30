@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState} from 'react';
 import ReactEcharts from 'echarts-for-react';
 import './years.css'
 
@@ -24,7 +24,12 @@ const Years = ({museumName}) => {
             top: 5,
             bottom: 5,
             axisTick: {},
-            axisLabel: {},
+            axisLabel: {
+                show: true,
+                formatter: function(value, index) {
+                  return index % 500 === 0 ? value : ''; 
+                }
+              },
             type: 'value',
             axisPointer: {
                 animation: true,
@@ -110,9 +115,9 @@ const Years = ({museumName}) => {
 }, [museumName]);
 
 return (
-  <div>
-    <div className='title'>生产年代</div>
-      <ReactEcharts option={option} />
+  <div className='container'>
+    <div className='title1' style={{width:'5%'}}>生产年代</div>
+    <div style={{ width: '95%', height: '100%'}}><ReactEcharts option={option} style={{ width: '100%', height: '250%' }}/></div>
   </div>
 )}
 export default Years;
