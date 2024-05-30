@@ -1,6 +1,12 @@
-.title {
-    font-size: 1em;
-    font-weight: bold;
-    text-align: center;
-    margin: 0.5em -2em;
+.left-button {
+  position: absolute;
+  top: 50%;
+  left: 2.5%;
+  width: 5%;
+}
+.title{
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  margin: 0.5em -2em;
 }

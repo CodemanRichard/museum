@@ -1,0 +1,13 @@
+.container{
+  display: flex;
+  /* justify-content: space-between; */
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.title1 {
+  /* 标题样式，根据需要调整 */
+  font-size: 2em;
+  font-weight: bold;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
