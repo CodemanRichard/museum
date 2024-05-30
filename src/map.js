@@ -342,7 +342,7 @@ function Map({museumName, changeProps }) {
   </>
   ))
 
-  console.log("length",museum_markers.length)
+  // console.log("length",museum_markers.length)
   // let mp=useMapEvents()
   // for(let p of points){
   //   if(p[0]==museumName){
