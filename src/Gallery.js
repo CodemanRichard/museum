@@ -214,7 +214,7 @@ function Gallery({ museumName, newDimension, newContent }) {
   };
 
     // update selected dimension and content
-    useEffect(() => {
+    /*useEffect(() => {
       if (newDimension !== null && newContent !== null
         && newDimension != undefined && newContent != undefined
         && newDimension !== "" && newContent !== ""
@@ -231,7 +231,43 @@ function Gallery({ museumName, newDimension, newContent }) {
       ) {
         changeContent(newContent);
       }
+    }, [selectedDimension]);*/
+    useEffect(() => {
+      if (newDimension !== null && newContent !== null
+        && newDimension != undefined && newContent != undefined
+        && newDimension !== "" && newContent !== ""
+        && newDimension !== "——" && newContent !== "——"
+      ) {
+        changeDimension(newDimension);
+      }
+    }, [newDimension]);
+    useEffect(() => {
+      if (newDimension !== null && newContent !== null
+        && newDimension != undefined && newContent != undefined
+        && newDimension !== "" && newContent !== ""
+        && newDimension !== "——" && newContent !== "——"
+      ) {
+        changeContent(newContent);
+      }
+    }, [newContent]);
+    useEffect(() => {
+      if (newDimension !== null && newContent !== null
+        && newDimension != undefined && newContent != undefined
+        && newDimension !== "" && newContent !== ""
+        && newDimension !== "——" && newContent !== "——"
+      ) {
+        changeContent(newContent);
+      }
     }, [selectedDimension]);
+    useEffect(() => {
+      if (newDimension !== null && newContent !== null
+        && newDimension != undefined && newContent != undefined
+        && newDimension !== "" && newContent !== ""
+        && newDimension !== "——" && newContent !== "——"
+      ) {
+        changeContent(selectedContent);
+      }
+    }, [selectedContent]);
 
       
     
