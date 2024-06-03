@@ -8,7 +8,7 @@ const WordCloud = ({ museumName, changeDimension, changeContent }) => {
     const [wordCloudDataEn, setWordCloudDataEn] = useState([]);
     const handleWordClick = (word) => {
         // console.log('Word clicked: ', word.text);
-        changeDimension('关键词');
+        changeDimension('Metadata_ZN');
         changeContent(word.text);
     };
 
