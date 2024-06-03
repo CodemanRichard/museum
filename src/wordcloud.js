@@ -3,9 +3,14 @@ import ReactWordcloud from 'react-wordcloud';
 import * as d3 from 'd3';
 // import './years.css'
 
-const WordCloud = ({ museumName }) => {
+const WordCloud = ({ museumName, changeDimension, changeContent }) => {
     const [wordCloudData, setWordCloudData] = useState([]);
     const [wordCloudDataEn, setWordCloudDataEn] = useState([]);
+    const handleWordClick = (word) => {
+        console.log('Word clicked: ', word.text);
+        changeDimension('关键词');
+        changeContent(word.text);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -104,6 +109,7 @@ const WordCloud = ({ museumName }) => {
 
     const callbacks = {
         getWordColor: (word) => word.color,
+        onWordClick: handleWordClick,
     };
 
     const options = {

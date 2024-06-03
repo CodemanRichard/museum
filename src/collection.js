@@ -2,9 +2,21 @@ import React, { useEffect, useState, useRef } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import './collection.css'
 
-const Collection = ({ museumName }) => {
+
+
+const Collection = ({ museumName, changeDimension, changeContent }) => {
     const [pieData, setPieData] = useState([]);
 
+
+    const handlePieClick = ({ data }) => {
+        const country = data.name;
+        if (country === '其他') {
+            return;
+        }
+        console.log('Country: ', country);
+        changeDimension('国家');
+        changeContent(country);
+    };
     const sortedPieData = Object.entries(pieData)
         .sort((a, b) => b[1] - a[1])
         .map(([country, count]) => ({ name: country, value: count }));
@@ -87,7 +99,7 @@ const Collection = ({ museumName }) => {
     return (
         <div>
             <div className='title'>藏品来源国家</div>
-            <ReactEcharts option={pieOption} />
+            <ReactEcharts option={pieOption} onEvents={{ click: handlePieClick }} />
         </div>
     )
 }
