@@ -10,4 +10,6 @@
   font-weight: bold;
   writing-mode: vertical-rl;
   text-orientation: upright;
+  margin-top: auto;
+  margin-bottom: auto;
 }

@@ -22,14 +22,18 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
     const sortedPieData = Object.entries(pieData)
         .sort((a, b) => b[1] - a[1])
         .map(([country, count]) => ({ name: country, value: count }));
-    const topTenPieData = sortedPieData.slice(0, 10);
-    const otherPieData = sortedPieData.slice(10);
+    const topTenPieData = sortedPieData.slice(0, 6);
+    const otherPieData = sortedPieData.slice(6);
 
     const otherCount = otherPieData.reduce((total, { value }) => total + value, 0);
     const otherData = { name: '其他', value: otherCount };
 
     const finalPieData = [...topTenPieData, otherData];
-
+    const colors = ['#990000', '#009900', '#000099', '#999900', '#990099', '#009999', '#994C00'];
+    finalPieData.forEach((data, index) => {
+        data.itemStyle = { color: colors[index] };
+    });
+    
     const pieOption = {
         tooltip: {
             trigger: 'item',
@@ -37,7 +41,14 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
         },
         legend: {
             orient: 'vertical',
-            left: 10,
+            left: 50, // Adjust the left value to move the legend to the right
+            top: 20,
+            itemGap: 12,
+            itemWidth: 20,
+            itemHeight: 20,
+            textStyle: {
+                fontSize: 12
+            },
             data: finalPieData.map(({ name }) => name)
         },
         series: [
@@ -62,7 +73,7 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
                 },
                 data: finalPieData
             }
-        ]
+        ],
     };
     useEffect(() => {
         const fetchData = async () => {
@@ -99,9 +110,9 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
     const echartsRef = useRef(null);
 
     return (
-        <div>
-            <div className='title'>藏品来源国家</div>
-            <ReactEcharts ref={echartsRef} option={pieOption} onEvents={{ click: handlePieClick}} />
+        <div className='container'>
+            <div className='title1' style={{width:'5%'}}>藏品来源国家</div>
+            <div style={{ width: '95%', height: '100%'}}><ReactEcharts ref={echartsRef} option={pieOption} onEvents={{ click: handlePieClick}} /></div>
         </div>
     )
 }

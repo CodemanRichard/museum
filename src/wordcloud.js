@@ -116,7 +116,7 @@ const WordCloud = ({ museumName, changeDimension, changeContent }) => {
         rotations: 2,
         rotationAngles: [-45, 0, 45],
     };
-    const size = [500, 400];
+    const size = [420,320];
 
     return (
         <div style={{ width: '100%' }}>

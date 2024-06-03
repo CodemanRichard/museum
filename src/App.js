@@ -26,11 +26,13 @@ function App() {
   const [dimension, setDimension] = useState('');
   const changeDimension = (newDimension) => {
     setDimension(newDimension);
+    console.log(newDimension);
   }
 
   const [content, setContent] = useState('');
   const changeContent = (newContent) => {
     setContent(newContent);
+    console.log(newContent);
   }
 
   return (
