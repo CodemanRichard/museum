@@ -7,7 +7,7 @@ const WordCloud = ({ museumName, changeDimension, changeContent }) => {
     const [wordCloudData, setWordCloudData] = useState([]);
     const [wordCloudDataEn, setWordCloudDataEn] = useState([]);
     const handleWordClick = (word) => {
-        console.log('Word clicked: ', word.text);
+        // console.log('Word clicked: ', word.text);
         changeDimension('关键词');
         changeContent(word.text);
     };
@@ -80,8 +80,8 @@ const WordCloud = ({ museumName, changeDimension, changeContent }) => {
                 setWordCloudData(wordCloudData);
                 setWordCloudDataEn(wordCloudDataEn);
 
-                console.log('Word cloud data: ', wordCloudData);
-                console.log('Word cloud data En: ', wordCloudDataEn);
+                // console.log('Word cloud data: ', wordCloudData);
+                // console.log('Word cloud data En: ', wordCloudDataEn);
 
             } catch (error) {
                 console.error('Error fetching data: ', error);

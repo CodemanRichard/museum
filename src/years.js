@@ -103,8 +103,8 @@ const Years = ({museumName}) => {
             }, {})
             const withChina_count_data = Object.keys(withChina_yearCounts).map(key => [key, withChina_yearCounts[key], '中国']);
             const withoutChina_count_data = Object.keys(withoutChina_yearCounts).map(key => [key, withoutChina_yearCounts[key], '国外']);
-            console.log(withChina_count_data)
-            console.log(withoutChina_count_data)
+            // console.log(withChina_count_data)
+            // console.log(withoutChina_count_data)
             setChinaData(withChina_count_data)
             setForeignData(withoutChina_count_data)
         } catch (error) {

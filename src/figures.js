@@ -39,11 +39,8 @@ const Figures = ({ museumName}) => {
                 // Filter the data based on the museum name
                 const filteredData_cn = data.filter((item) => item['博物馆'] === museumName && item['country'] === 'China');
                 const filteredData_en = data.filter((item) => item['博物馆'] === museumName && item['country'] != 'China');
-                console.log('filteredData', filteredData_cn)
                 const words_cn = filteredData_cn.flatMap(item => item[selectedDimension]);
                 const words_en = filteredData_en.flatMap(item => item[selectedDimension]);
-                console.log('words',words_cn)
-                console.log('words',words_en)
                 const wordCounts_cn = words_cn.reduce((counts, word) => {
                   const splitWords_cn = word.split(";");
                   splitWords_cn.forEach((splitWord) => {
@@ -61,8 +58,6 @@ const Figures = ({ museumName}) => {
                     return counts;
                 }, {});
                 delete wordCounts_en['——'];
-                console.log('wordcounts',wordCounts_cn)
-                console.log('wordcounts',wordCounts_en)
 
                 const sortedWordCounts_cn = Object.entries(wordCounts_cn).sort((a, b) => b[1] - a[1]);
                 const top9WordCounts_cn = sortedWordCounts_cn.slice(0, 9);

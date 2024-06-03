@@ -13,8 +13,8 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
         if (country === '其他') {
             return;
         }
-        console.log('Country: ', country);
-        changeDimension('国家');
+        // changeDimension('国家');
+        changeDimension('country');
         changeContent(country);
     };
 
@@ -74,7 +74,6 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
                 const filteredData = data.filter((item) => item['博物馆'] === museumName);
 
                 const counts = filteredData.length;
-                console.log('Total number of items: ', counts);
 
                 const countryCounts = filteredData.reduce((counts, item) => {
                     const country = item['country'];
@@ -87,7 +86,6 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
 
                 setPieData(countryCounts)
 
-                console.log('Country counts: ', countryCounts);
 
 
             } catch (error) {

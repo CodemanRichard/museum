@@ -22,7 +22,6 @@ const fetchData = async (china_id, foreign_id) => {
   const response = await fetch("http://localhost:5000/get_data");
   const data = await response.json();
   let filteredData = [null, null];
-  console.log(china_id, foreign_id);
   data.forEach((item) => {
     if (item["ID"] === china_id) {
       filteredData[0] = item;

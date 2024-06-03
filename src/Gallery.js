@@ -166,9 +166,9 @@ function Gallery({ museumName, newDimension, newContent }) {
     });
   };
 
-  const changeContent = (value) => {
+  const changeContent = async (value) => {
     // update selected content
-    setSelectedContent(value);
+    await setSelectedContent(value);
     // update images
     fetchData(museumName).then((data) => {
       let newImages = [];
@@ -215,13 +215,26 @@ function Gallery({ museumName, newDimension, newContent }) {
 
     // update selected dimension and content
     useEffect(() => {
-      if (newDimension !== null && newContent !== null) {
+      if (newDimension !== null && newContent !== null
+        && newDimension != undefined && newContent != undefined
+        && newDimension !== "" && newContent !== ""
+        && newDimension !== "——" && newContent !== "——"
+      ) {
         changeDimension(newDimension);
-        changeContent(newContent);
-        console.log("newDimension: ", newDimension);
-        console.log("newContent: ", newContent);
       }
-    }, [newDimension, newContent]);
+    }, [newContent]);
+    useEffect(() => {
+      if (newDimension !== null && newContent !== null
+        && newDimension != undefined && newContent != undefined
+        && newDimension !== "" && newContent !== ""
+        && newDimension !== "——" && newContent !== "——"
+      ) {
+        changeContent(newContent);
+      }
+    }, [selectedDimension]);
+
+      
+    
 
   return (
     <div className="App">
