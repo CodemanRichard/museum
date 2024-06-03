@@ -4,9 +4,9 @@ import './collection.css'
 
 
 
+
 const Collection = ({ museumName, changeDimension, changeContent }) => {
     const [pieData, setPieData] = useState([]);
-
 
     const handlePieClick = ({ data }) => {
         const country = data.name;
@@ -17,6 +17,8 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
         changeDimension('国家');
         changeContent(country);
     };
+
+
     const sortedPieData = Object.entries(pieData)
         .sort((a, b) => b[1] - a[1])
         .map(([country, count]) => ({ name: country, value: count }));
@@ -96,10 +98,12 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
         fetchData();
     }, [museumName]);
 
+    const echartsRef = useRef(null);
+
     return (
         <div>
             <div className='title'>藏品来源国家</div>
-            <ReactEcharts option={pieOption} onEvents={{ click: handlePieClick }} />
+            <ReactEcharts ref={echartsRef} option={pieOption} onEvents={{ click: handlePieClick}} />
         </div>
     )
 }

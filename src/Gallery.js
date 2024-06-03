@@ -61,9 +61,10 @@ const fetchData = async (museumName) => {
   return filteredData;
 };
 
-function Gallery({ museumName }) {
+function Gallery({ museumName, newDimension, newContent }) {
   const [images, setImages] = useState([]);
   const [imageCount, setImageCount] = useState(0);
+
   useEffect(() => {
     fetchData(museumName).then((data) => {
       let newImages = [];
@@ -143,7 +144,7 @@ function Gallery({ museumName }) {
         ) {
           continue;
         }
-        if(value === "起始年"){
+        if (value === "起始年") {
           words = String(words);
         }
         let wordList = words.split(";");
@@ -196,10 +197,10 @@ function Gallery({ museumName }) {
         } else {
           imageProperties["alt"] = item["藏品名称_ZN"];
         }
-        if(item[selectedDimension] == null || item[selectedDimension] == undefined || item[selectedDimension] == "" || item[selectedDimension] == "——"){
+        if (item[selectedDimension] == null || item[selectedDimension] == undefined || item[selectedDimension] == "" || item[selectedDimension] == "——") {
           return;
         }
-        if(selectedDimension === "起始年"){
+        if (selectedDimension === "起始年") {
           item[selectedDimension] = String(item[selectedDimension]);
         }
         let values = item[selectedDimension].split(";");
@@ -211,6 +212,16 @@ function Gallery({ museumName }) {
       setImageCount(newImages.length);
     });
   };
+
+    // update selected dimension and content
+    useEffect(() => {
+      if (newDimension !== null && newContent !== null) {
+        changeDimension(newDimension);
+        changeContent(newContent);
+        console.log("newDimension: ", newDimension);
+        console.log("newContent: ", newContent);
+      }
+    }, [newDimension, newContent]);
 
   return (
     <div className="App">

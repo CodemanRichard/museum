@@ -37,7 +37,7 @@ function App() {
     <>
     <div className='irregular-box box1'><Title museumName={props} changeProps={changeProps}/></div>
     <div className='irregular-box box2'><Map museumName={props} changeProps={changeProps}/></div>
-    <div className='irregular-box box3'><Gallery museumName={props}/></div>
+    <div className='irregular-box box3'><Gallery museumName={props} newDimension={dimension} newContent={content}/></div>
     <div className='irregular-box box4'><Buttons changeFigure={changeFigure}/></div>
     <div className='irregular-box box4'><Collection museumName={props} changeDimension={changeDimension} changeContent={changeContent}/></div>
     <div className='irregular-box box5'><WordCloud museumName={props} changeDimension={changeDimension} changeContent={changeContent}/></div>
