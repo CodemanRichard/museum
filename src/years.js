@@ -55,7 +55,8 @@ const Years = ({museumName}) => {
                         shadowColor: 'rgba(0, 0, 0, 0.8)'
                     }
                 },
-                data: ChinaData
+                data: ChinaData,
+                color: ['#6bae91'] // Change the color for China
             },
             {
                 type: 'themeRiver',
@@ -66,7 +67,8 @@ const Years = ({museumName}) => {
                         shadowColor: 'rgba(0, 0, 0, 0.8)'
                     }
                 },
-                data: ForeignData
+                data: ForeignData,
+                color: ['#ecc92e'] // Change the color for Foreign
             }
         ]
     };
