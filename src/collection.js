@@ -29,7 +29,7 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
     const otherData = { name: '其他', value: otherCount };
 
     const finalPieData = [...topTenPieData, otherData];
-    const colors = ['#990000', '#009900', '#000099', '#999900', '#990099', '#009999', '#994C00'];
+    const colors = ['#6bae91', '#ecc92e', '#42beda', '#ff9900', '#ff00ff', '#00ffff', '#ff4C00'];
     finalPieData.forEach((data, index) => {
         data.itemStyle = { color: colors[index] };
     });

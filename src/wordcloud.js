@@ -94,9 +94,9 @@ const WordCloud = ({ museumName, changeDimension, changeContent }) => {
 
     const getColor = (text) => {
         if (wordCloudData.some((keyword) => keyword.text === text)) {
-            return 'darkred';
+            return '#6bae91';
         } else {
-            return 'darkblue';
+            return '#ecc92e';
         }
     };
 
@@ -116,32 +116,35 @@ const WordCloud = ({ museumName, changeDimension, changeContent }) => {
         rotations: 2,
         rotationAngles: [-45, 0, 45],
     };
-    const size = [420,320];
+    const size = [250, 200];
 
     return (
         <div style={{ width: '100%' }}>
             <div className='title'>中外馆藏关键词</div>
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
-                    <div style={{ width: '20px', height: '20px', backgroundColor: 'darkred' }}></div>
-                    <div style={{ marginLeft: '5px' }}>中国</div>
+                <div style={{ display: 'flex', alignItems: 'center', marginRight: '5px' }}>
+                    <div style={{ width: '10px', height: '10px', backgroundColor: '#6bae91' }}></div>
+                    <div style={{ marginLeft: '5px', fontSize: '12px' }}>中国</div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{ width: '20px', height: '20px', backgroundColor: 'darkblue' }}></div>
-                    <div style={{ marginLeft: '5px' }}>外国</div>
+                    <div style={{ width: '10px', height: '10px', backgroundColor: '#ecc92e' }}></div>
+                    <div style={{ marginLeft: '5px', fontSize: '12px' }}>外国</div>
                 </div>
             </div>
-            <ReactWordcloud
-                callbacks={callbacks}
-                options={{
-                    ...options,
-                    fontFamily: 'Arial',
-                    fontWeight: 'bold',
-                    fontSizes: [30, 80],
-                }}
-                size={size}
-                words={wordsWithColor}
-            />
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '-10px' }}>
+                <ReactWordcloud
+                    callbacks={callbacks}
+                    options={{
+                        ...options,
+                        fontFamily: 'Arial',
+                        fontWeight: 'bold',
+                        fontSizes: [20, 40],
+                    }}
+                    size={size}
+                    words={wordsWithColor}
+                />
+            </div>
+
         </div>
     );
 
