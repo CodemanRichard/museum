@@ -19,16 +19,25 @@ const dimensions = [
   ];
 
 
-const Figures = ({ museumName}) => {
+const Figures = ({ museumName, changeDimension, changeContent }) => {
   const [selectedDimension, setSelectedDimension] = useState(dimensions[0].value);
   const [wordData_cn, setWordData_cn] = useState([]);
   const [wordData_en, setWordData_en] = useState([]);
 
-  const changeDimension = (value) => {
+  const handleClick = ({ data }) => {
+    const dimension = data.name;
+    if (dimension === '其他') {
+        return;
+    }
+    console.log(dimension)
+    // changeDimension('国家');
+    changeDimension(selectedDimension);
+    changeContent(dimension);
+};
+  const ChangeDimension = (value) => {
     // update selected dimension
     setSelectedDimension(value);
   };
-
     useEffect(() => {
       setSelectedDimension(selectedDimension);
         const fetchData = async () => {
@@ -38,7 +47,7 @@ const Figures = ({ museumName}) => {
 
                 // Filter the data based on the museum name
                 const filteredData_cn = data.filter((item) => item['博物馆'] === museumName && item['country'] === 'China');
-                const filteredData_en = data.filter((item) => item['博物馆'] === museumName && item['country'] != 'China');
+                const filteredData_en = data.filter((item) => item['博物馆'] === museumName && item['country'] !== 'China');
                 const words_cn = filteredData_cn.flatMap(item => item[selectedDimension]);
                 const words_en = filteredData_en.flatMap(item => item[selectedDimension]);
                 const wordCounts_cn = words_cn.reduce((counts, word) => {
@@ -118,12 +127,12 @@ const Figures = ({ museumName}) => {
                   <Select
                       value={selectedDimension}
                       className="selector"
-                      onChange={changeDimension}
+                      onChange={ChangeDimension}
                       options={dimensions}
                   />
                   </div>
                   <div style={{ width: '100%' }}>
-                    <ReactEcharts option={getOption(wordData_cn, wordData_en)} />
+                    <ReactEcharts option={getOption(wordData_cn, wordData_en)} onEvents={{ click: handleClick}} />
                   </div>
             </div>
         </div>

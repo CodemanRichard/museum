@@ -2,73 +2,60 @@ import React, { useEffect, useState} from 'react';
 import ReactEcharts from 'echarts-for-react';
 import './years.css'
 
-const Years = ({museumName}) => {
-  const [ChinaData, setChinaData] = useState([]);
+const Years = ({museumName, changeDimension, changeContent }) => {
+    const [ChinaData, setChinaData] = useState([]);
     const [ForeignData, setForeignData] = useState([]);
+
+    const handleClick = ({ data }) => {
+        const year = data[0];
+        if (year === '其他') {
+            return;
+        }
+        console.log(year)
+        // changeDimension('国家');
+        changeDimension('起始年');
+        changeContent(year);
+    };
+
     const option = {
         tooltip: {
             trigger: 'axis',
-            axisPointer: {
-                type: 'line',
-                lineStyle: {
-                    color: 'rgba(0,0,0,0.2)',
-                    width: 1,
-                    type: 'solid'
-                }
-            }
-        },
+            minInterval: 1
+          },
         legend: {
             data: ['中国', '国外']
         },
-        singleAxis: {
-            top: 5,
-            bottom: 5,
-            axisTick: {},
-            axisLabel: {
-                show: true,
-                formatter: function(value, index) {
-                  return index % 500 === 0 ? value : ''; 
-                }
-              },
-            type: 'value',
-            axisPointer: {
-                animation: true,
-                label: {
-                    show: true
-                },
-            },
-            splitLine: {
-                show: true,
-                lineStyle: {
-                    type: 'dashed',
-                    opacity: 0.2
-                }
-            },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
         },
+        xAxis: {
+            type: 'value',
+            minInterval: 1
+        },
+        yAxis: {
+            type: 'value',
+            position: 'left', 
+            scale: true
+          },
         series: [
             {
-                type: 'themeRiver',
-                smooth: true,
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 20,
-                        shadowColor: 'rgba(0, 0, 0, 0.8)'
-                    }
-                },
+                name: '中国',
+                type: 'line',
                 data: ChinaData,
-                color: ['#6bae91'] // Change the color for China
+                itemStyle: {
+                    color: '#6bae91'
+                },
             },
             {
-                type: 'themeRiver',
-                smooth: true,
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 20,
-                        shadowColor: 'rgba(0, 0, 0, 0.8)'
-                    }
-                },
+                name: '国外',
+                type: 'line',
                 data: ForeignData,
-                color: ['#ecc92e'] // Change the color for Foreign
+                itemStyle: {
+                    color: '#ecc92e'
+                },
             }
         ]
     };
@@ -94,7 +81,7 @@ const Years = ({museumName}) => {
                 }
             });
             const withChina_data = withChina.flatMap(item => item['起始年']);
-            const withoutChina_data = withoutChina.flatMap(item => item['起始年']);
+            const withoutChina_data = withoutChina.flatMap(item => item['起始年']); 
             const withChina_yearCounts = withChina_data.reduce((accumulator, year) => {
                 accumulator[year] = (accumulator[year] || 0) + 1;
                 return accumulator;
@@ -103,10 +90,12 @@ const Years = ({museumName}) => {
                 accumulator[year] = (accumulator[year] || 0) + 1;
                 return accumulator;
             }, {})
-            const withChina_count_data = Object.keys(withChina_yearCounts).map(key => [key, withChina_yearCounts[key], '中国']);
-            const withoutChina_count_data = Object.keys(withoutChina_yearCounts).map(key => [key, withoutChina_yearCounts[key], '国外']);
-            // console.log(withChina_count_data)
-            // console.log(withoutChina_count_data)
+            const withChina_count_data = Object.keys(withChina_yearCounts).map(key => [key, withChina_yearCounts[key]]);
+            const withoutChina_count_data = Object.keys(withoutChina_yearCounts).map(key => [key, withoutChina_yearCounts[key]]);
+            withChina_count_data.sort((a, b) => a[0] - b[0]);
+            withoutChina_count_data.sort((a, b) => a[0] - b[0]);
+            console.log(withChina_count_data)
+            console.log(withoutChina_count_data)
             setChinaData(withChina_count_data)
             setForeignData(withoutChina_count_data)
         } catch (error) {
@@ -119,7 +108,7 @@ const Years = ({museumName}) => {
 return (
   <div className='container'>
     <div className='title1' style={{width:'5%'}}>生产年代</div>
-    <div style={{ width: '95%', height: '100%'}}><ReactEcharts option={option} style={{ width: '100%', height: '250%' }}/></div>
+    <div style={{ width: '95%', height: '100%'}}><ReactEcharts option={option} onEvents={{ click: handleClick}} style={{ width: '100%', height: '250%' }}/></div>
   </div>
 )}
 export default Years;
