@@ -57,6 +57,14 @@ const Years = ({museumName, changeDimension, changeContent }) => {
                     color: '#ecc92e'
                 },
             }
+        ],
+        dataZoom: [
+            {
+                type: 'inside',
+                xAxisIndex: 0,
+                start: 0,
+                end: 100
+            }
         ]
     };
     useEffect(() => {
