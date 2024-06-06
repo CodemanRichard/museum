@@ -111,7 +111,8 @@ const Figures = ({ museumName, changeDimension, changeContent }) => {
               children: dataEn,
             },
           ],
-          radius: [0, '90%'],
+          center: ['50%', '38%'],
+          radius: [0, '75%'],
           label: {
             rotate: 'radial',
           },

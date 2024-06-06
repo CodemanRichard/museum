@@ -4,3 +4,24 @@
   justify-content: flex-start;
   align-items: flex-start;
 }
+
+.title1 {
+  /* 标题样式，根据需要调整 */
+  flex: 1;
+  font-size: 1.2em;
+  font-weight: bold;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.years-flex {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.years-graph {
+  flex: 12;
+}

@@ -42,7 +42,7 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
         legend: {
             orient: 'vertical',
             left: 50, // Adjust the left value to move the legend to the right
-            top: 20,
+            top: 10,
             itemGap: 12,
             itemWidth: 20,
             itemHeight: 20,
@@ -55,6 +55,7 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
             {
                 name: 'Country',
                 type: 'pie',
+                center: ['50%', '40%'],
                 radius: ['50%', '70%'],
                 avoidLabelOverlap: false,
                 label: {
@@ -109,10 +110,16 @@ const Collection = ({ museumName, changeDimension, changeContent }) => {
 
     const echartsRef = useRef(null);
 
-    return (
+    /*return (
         <div className='container'>
-            <div className='title1' style={{width:'5%'}}>藏品来源国家</div>
+            <div className='title1'>藏品来源国家</div>
             <div style={{ width: '95%', height: '100%'}}><ReactEcharts ref={echartsRef} option={pieOption} onEvents={{ click: handlePieClick}} /></div>
+        </div>
+    )*/
+    return (
+        <div className='collection-flex'>
+            <div className='title2'>藏品来源国家</div>
+            <div className='collection-graph' style={{ width: '95%', height: '100%'}}><ReactEcharts ref={echartsRef} option={pieOption} onEvents={{ click: handlePieClick}} /></div>
         </div>
     )
 }

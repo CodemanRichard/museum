@@ -106,9 +106,9 @@ const Years = ({museumName, changeDimension, changeContent }) => {
 }, [museumName]);
 
 return (
-  <div className='container'>
-    <div className='title1' style={{width:'5%'}}>生产年代</div>
-    <div style={{ width: '95%', height: '100%'}}><ReactEcharts option={option} onEvents={{ click: handleClick}} style={{ width: '100%', height: '250%' }}/></div>
+  <div className='years-flex'>
+    <div className='title1'>生产年代</div>
+    <div className='years-graph' style={{ width: '95%', height: '40%'}}><ReactEcharts option={option} onEvents={{ click: handleClick}} style={{ width: '100%', height: '250%' }}/></div>
   </div>
 )}
 export default Years;
